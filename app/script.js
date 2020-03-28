@@ -22,11 +22,17 @@ class App extends React.Component {
     };
   }
 
+  playBell = () => {
+    var audioElement = new Audio('./sounds/bell.wav');
+    audioElement.play();
+  };
+
   step = () => {
     this.setState({
       time: this.state.time - 1
     });
      if (this.state.time === 0) {
+      this.playBell();
       if (this.state.status === 'work') {
         this.setState({ status: 'rest', time: 20 });
       } else if (this.state.status === 'rest') {
@@ -43,6 +49,18 @@ class App extends React.Component {
       status: 'work'
     });
 
+  };
+
+  stopTimer = () => {
+    this.setState({
+      timer: clearInterval(),
+      time: 0,
+      status: 'off'
+    });
+  };
+
+  closeApp = () => {
+    window.close();
   };
 
   render() {
@@ -66,8 +84,8 @@ class App extends React.Component {
         {(status === 'rest') && <img src="./images/rest.png" />}
         {(status !== 'off') && <div className="timer">{formatTime(this.state.time)}</div>}
         {(status === 'off') && <button className="btn" onClick={this.startTimer}>Start</button>}
-        {(status !== 'off') && <button className="btn">Stop</button>}
-        <button className="btn btn-close">X</button>
+        {(status !== 'off') && <button className="btn" onClick={this.stopTimer}>Stop</button>}
+        <button className="btn btn-close" onClick={this.closeApp}>X</button>
       </div>
     );
   }
